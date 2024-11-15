@@ -5,13 +5,18 @@
 
 struct Person {
   int id;
-  std::string name;
+  std::string first_name;
+  std::string last_name;
   char genre;
-  int relation;
+  int father;
+  int mother;
 
   bool operator==(const Person &other) const {
-    return (id == other.id) && (name == other.name) && (genre == other.genre);
+    return (id == other.id) && (first_name == other.first_name) &&
+           (last_name == other.last_name) && (genre == other.genre);
   }
+
+  bool operator<(const Person &other) const { return id < other.id; }
 };
 
 std::ostream &operator<<(std::ostream &os, const Person &person);

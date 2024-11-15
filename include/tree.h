@@ -29,26 +29,37 @@ class Node {
 class Tree {
  public:
   Node *root;
-  std::vector<Person> inorderNodes;
-  Tree() { this->lastMember = 0; }
+  Tree() {
+    this->lastMember = 0;
+    this->currentLevel = 0;
+  }
   ~Tree() {}
 
   void insert(const Person &value);
   void inorder() const;
+  void inorderVector(std::vector<Node *> &nodes) const;
   void print2D() const;
 
   void setLastMember(int lastMember) { this->lastMember = lastMember; }
   int getLastMember() { return this->lastMember; }
+  void setCurrentLevel(int level) { this->currentLevel = level; }
+  int getCurrentLevel() { return this->currentLevel; }
+
   Node *find(const Person &value) const;
 
  private:
   int lastMember;
+  int currentLevel;
 
   void insertRecursive(Node *&node, Person value);
   void inorderRecursive(Node *node) const;
+  void inorderRecursiveVector(Node *node, std::vector<Node *> &nodes) const;
   void print2DRecursive(Node *root, int space) const;
   Node *findRecursive(Node *node, const Person &value) const;
 };
+
+// Encuentra el nivel de un nodo en el árbol.
+
 
 void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember);
 

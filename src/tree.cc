@@ -28,6 +28,22 @@ void Tree::inorderRecursive(Node *node) const {
   inorderRecursive(node->right);
 }
 
+// inorder vector
+void Tree::inorderVector(std::vector<Node *> &nodes) const {
+  inorderRecursiveVector(this->root, nodes);
+  std::cout << std::endl;
+}
+
+void Tree::inorderRecursiveVector(Node *node,
+                                  std::vector<Node *> &nodes) const {
+  if (node == nullptr) {
+    return;
+  }
+  inorderRecursiveVector(node->left, nodes);
+  nodes.push_back(node);
+  inorderRecursiveVector(node->right, nodes);
+}
+
 // Print2D
 void Tree::print2D() const {
   std::cout << "\x1b[32mTree Visualization\x1b[0m" << std::endl << std::endl;
@@ -64,7 +80,7 @@ Node *Tree::findRecursive(Node *node, const Person &value) const {
     return nullptr;
   }
 
-  if (node->data == value) {
+  if (node->data.id == value.id) {
     return node;
   }
 
