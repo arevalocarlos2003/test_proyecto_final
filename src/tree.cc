@@ -110,3 +110,27 @@ void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember) {
 
   // subtree_root->insert(newMember);
 }
+
+// find level methods
+int Tree::findLevel(const Person &value) const {
+  return findLevelRecursive(this->root, value, 0);
+}
+
+int Tree::findLevelRecursive(Node *node, const Person &value, int level) const {
+  if (node == nullptr) {
+    return -1;  // Devuelve -1 si el nodo no se encuentra.
+  }
+
+  if (node->data == value) {
+    return level;
+  }
+
+  // Busca en el subárbol izquierdo.
+  int leftLevel = findLevelRecursive(node->left, value, level + 1);
+  if (leftLevel != -1) {
+    return leftLevel;
+  }
+
+  // Si no se encuentra en la izquierda, busca en el derecho.
+  return findLevelRecursive(node->right, value, level + 1);
+}

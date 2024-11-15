@@ -46,6 +46,7 @@ class Tree {
   int getCurrentLevel() { return this->currentLevel; }
 
   Node *find(const Person &value) const;
+  int findLevel(const Person &value) const;
 
  private:
   int lastMember;
@@ -56,10 +57,8 @@ class Tree {
   void inorderRecursiveVector(Node *node, std::vector<Node *> &nodes) const;
   void print2DRecursive(Node *root, int space) const;
   Node *findRecursive(Node *node, const Person &value) const;
+  int findLevelRecursive(Node *root, const Person &value, int level) const;
 };
-
-// Encuentra el nivel de un nodo en el árbol.
-
 
 void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember);
 
