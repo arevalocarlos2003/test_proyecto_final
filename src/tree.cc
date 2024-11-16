@@ -61,7 +61,7 @@ void Tree::print2DRecursive(Node *root, int space) const {
 
   print2DRecursive(root->right, space);
   std::cout << std::endl;
-  for (int i = kSpace; i < space; i++) std::cout << "  ";
+  for (int i = kSpace; i < space; i++) std::cout << "   ";
   if (root->left != nullptr || root->right != nullptr)
     std::cout << root->data << " <\n";
   else
@@ -148,7 +148,52 @@ struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID) {
       inorderVector.begin(), inorderVector.end(),
       [&](Node *&currentNode) { return currentNode->data.id == targetID; });
 
+  if (*it == nullptr) {
+    std::cout << "\x1b[31mNot Found\x1b[0m" << std::endl;
+    return nullptr;
+  }
+
   return *it;
+}
+
+std::vector<Node *> SearchByName(std::vector<Node *> &inorderVector,
+                                 struct Person targetMember) {
+  if (inorderVector.empty()) {
+    std::cout << "\x1b[31mThere are not members on the tree\x1b[0m"
+              << std::endl;
+    return {};
+  }
+
+  std::vector<Node *> subVector;
+
+  for (auto &element : inorderVector) {
+    if (element->data.first_name == targetMember.first_name) {
+      subVector.push_back(element);
+    }
+  }
+
+  std::sort(inorderVector.begin(), inorderVector.end());
+  return subVector;
+}
+
+std::vector<Node *> SearchByLastName(std::vector<Node *> &inorderVector,
+                                     struct Person targetMember) {
+  if (inorderVector.empty()) {
+    std::cout << "\x1b[31mThere are not members on the tree\x1b[0m"
+              << std::endl;
+    return {};
+  }
+
+  std::vector<Node *> subVector;
+
+  for (auto &element : inorderVector) {
+    if (element->data.last_name == targetMember.last_name) {
+      subVector.push_back(element);
+    }
+  }
+
+  std::sort(inorderVector.begin(), inorderVector.end());
+  return subVector;
 }
 
 // Create functions
@@ -159,11 +204,9 @@ struct Person CreateMemberFromKeyBoard(Tree *root) {
   std::cin.ignore();
   std::cout << "first name: " << std::endl;
   std::getline(std::cin, newMember.first_name);
-  std::cout << newMember.first_name << std::endl;
 
   std::cout << "last name: " << std::endl;
   std::getline(std::cin, newMember.last_name);
-  std::cout << newMember.last_name << std::endl;
 
   std::cout << "genre: " << std::endl;
   std::cin >> newMember.genre;
@@ -172,4 +215,21 @@ struct Person CreateMemberFromKeyBoard(Tree *root) {
   newMember.mother = -1;
 
   return newMember;
+}
+
+struct Person GetMemberNamesFromKeyBoard() {
+  struct Person targetMember;
+  std::cin.ignore();
+  std::cout << "first name: " << std::endl;
+  std::getline(std::cin, targetMember.first_name);
+
+  std::cout << "first name: " << std::endl;
+  std::getline(std::cin, targetMember.first_name);
+  return targetMember;
+}
+
+void PrintInorderNodes(std::vector<Node *> inorderNodesCollection) {
+  for (size_t i = 0; i < inorderNodesCollection.size(); ++i) {
+    printPerson(inorderNodesCollection[i]->data);
+  }
 }

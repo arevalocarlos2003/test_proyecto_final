@@ -21,5 +21,5 @@ void ShowCLISearchOptions() {
   std::cout << "1. Search By ID" << std::endl;
   std::cout << "2. Search By first name" << std::endl;
   std::cout << "3. Search By last name" << std::endl;
-  std::cout << "4. Search By ID" << std::endl << std::endl;
+  std::cout << "4. Back Main Menu" << std::endl << std::endl;
 }

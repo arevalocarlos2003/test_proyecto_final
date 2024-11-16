@@ -66,8 +66,15 @@ void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember);
 // Search Functions
 int GetTargetIDFromKeyBoard();
 struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID);
+std::vector<Node *> SearchByName(std::vector<Node *> &inorderVector,
+                                 struct Person targetMember);
+std::vector<Node *> SearchByLastName(std::vector<Node *> &inorderVector,
+                                 struct Person targetMember);
 
 // Create From KeyBoard Functions
 struct Person CreateMemberFromKeyBoard(Tree *root);
+struct Person GetMemberNamesFromKeyBoard();
+
+void PrintInorderNodes(std::vector<Node *> inorderNodesCollection);
 
 #endif  // TREE_H
