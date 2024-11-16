@@ -69,33 +69,33 @@ void Tree::print2DRecursive(Node *root, int space) const {
   print2DRecursive(root->left, space);
 }
 
-// find methods
+// findSubTree methods
 
-Node *Tree::find(const Person &value) const {
-  return findRecursive(root, value);
+Node *Tree::findSubTree(const int &target) const {
+  return findSubTreeRecursive(root, target);
 }
 
-Node *Tree::findRecursive(Node *node, const Person &value) const {
+Node *Tree::findSubTreeRecursive(Node *node, const int &value) const {
   if (node == nullptr) {
     return nullptr;
   }
 
-  if (node->data.id == value.id) {
+  if (node->data.id == value) {
     return node;
   }
 
-  Node *aux = findRecursive(node->left, value);
+  Node *aux = findSubTreeRecursive(node->left, value);
 
   if (aux == nullptr) {
-    return findRecursive(node->right, value);
+    return findSubTreeRecursive(node->right, value);
   }
 
   return aux;
 }
 
-void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember) {
+void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
   Tree *subtree = new Tree();
-  subtree->root = root->find(targetPosition);
+  subtree->root = root->findSubTree(targetPosition);
 
   root->setLastMember(root->getLastMember() + 1);
   newMember.id = root->getLastMember();
@@ -111,7 +111,7 @@ void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember) {
   // subtree_root->insert(newMember);
 }
 
-// find level methods
+// findSubTree level methods
 int Tree::findLevel(const Person &value) const {
   return findLevelRecursive(this->root, value, 0);
 }
@@ -133,4 +133,43 @@ int Tree::findLevelRecursive(Node *node, const Person &value, int level) const {
 
   // Si no se encuentra en la izquierda, busca en el derecho.
   return findLevelRecursive(node->right, value, level + 1);
+}
+
+// Search Functions
+int GetTargetIDFromKeyBoard() {
+  int targetID = 0;
+  std::cout << "\x1b[33mtarget id: \x1b[0m";
+  std::cin >> targetID;
+  return targetID;
+}
+
+struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID) {
+  auto it = std::find_if(
+      inorderVector.begin(), inorderVector.end(),
+      [&](Node *&currentNode) { return currentNode->data.id == targetID; });
+
+  return *it;
+}
+
+// Create functions
+struct Person CreateMemberFromKeyBoard(Tree *root) {
+  struct Person newMember;
+  newMember.id = 0;
+
+  std::cin.ignore();
+  std::cout << "first name: " << std::endl;
+  std::getline(std::cin, newMember.first_name);
+  std::cout << newMember.first_name << std::endl;
+
+  std::cout << "last name: " << std::endl;
+  std::getline(std::cin, newMember.last_name);
+  std::cout << newMember.last_name << std::endl;
+
+  std::cout << "genre: " << std::endl;
+  std::cin >> newMember.genre;
+
+  newMember.father = -1;
+  newMember.mother = -1;
+
+  return newMember;
 }

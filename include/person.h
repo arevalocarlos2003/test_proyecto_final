@@ -20,5 +20,5 @@ struct Person {
 };
 
 std::ostream &operator<<(std::ostream &os, const Person &person);
-
+void printPerson(const Person &person);
 #endif  // PERSON_H
