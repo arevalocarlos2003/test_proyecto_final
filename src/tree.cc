@@ -28,6 +28,22 @@ void Tree::inorderRecursive(Node *node) const {
   inorderRecursive(node->right);
 }
 
+// inorder vector
+void Tree::inorderVector(std::vector<Node *> &nodes) const {
+  inorderRecursiveVector(this->root, nodes);
+  std::cout << std::endl;
+}
+
+void Tree::inorderRecursiveVector(Node *node,
+                                  std::vector<Node *> &nodes) const {
+  if (node == nullptr) {
+    return;
+  }
+  inorderRecursiveVector(node->left, nodes);
+  nodes.push_back(node);
+  inorderRecursiveVector(node->right, nodes);
+}
+
 // Print2D
 void Tree::print2D() const {
   std::cout << "\x1b[32mTree Visualization\x1b[0m" << std::endl << std::endl;
@@ -45,7 +61,7 @@ void Tree::print2DRecursive(Node *root, int space) const {
 
   print2DRecursive(root->right, space);
   std::cout << std::endl;
-  for (int i = kSpace; i < space; i++) std::cout << "  ";
+  for (int i = kSpace; i < space; i++) std::cout << "   ";
   if (root->left != nullptr || root->right != nullptr)
     std::cout << root->data << " <\n";
   else
@@ -53,33 +69,33 @@ void Tree::print2DRecursive(Node *root, int space) const {
   print2DRecursive(root->left, space);
 }
 
-// find methods
+// findSubTree methods
 
-Node *Tree::find(const Person &value) const {
-  return findRecursive(root, value);
+Node *Tree::findSubTree(const int &target) const {
+  return findSubTreeRecursive(root, target);
 }
 
-Node *Tree::findRecursive(Node *node, const Person &value) const {
+Node *Tree::findSubTreeRecursive(Node *node, const int &value) const {
   if (node == nullptr) {
     return nullptr;
   }
 
-  if (node->data == value) {
+  if (node->data.id == value) {
     return node;
   }
 
-  Node *aux = findRecursive(node->left, value);
+  Node *aux = findSubTreeRecursive(node->left, value);
 
   if (aux == nullptr) {
-    return findRecursive(node->right, value);
+    return findSubTreeRecursive(node->right, value);
   }
 
   return aux;
 }
 
-void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember) {
+void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
   Tree *subtree = new Tree();
-  subtree->root = root->find(targetPosition);
+  subtree->root = root->findSubTree(targetPosition);
 
   root->setLastMember(root->getLastMember() + 1);
   newMember.id = root->getLastMember();
@@ -93,4 +109,127 @@ void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember) {
   subtree->insert(newMember);
 
   // subtree_root->insert(newMember);
+}
+
+// findSubTree level methods
+int Tree::findLevel(const Person &value) const {
+  return findLevelRecursive(this->root, value, 0);
+}
+
+int Tree::findLevelRecursive(Node *node, const Person &value, int level) const {
+  if (node == nullptr) {
+    return -1;  // Devuelve -1 si el nodo no se encuentra.
+  }
+
+  if (node->data == value) {
+    return level;
+  }
+
+  // Busca en el subárbol izquierdo.
+  int leftLevel = findLevelRecursive(node->left, value, level + 1);
+  if (leftLevel != -1) {
+    return leftLevel;
+  }
+
+  // Si no se encuentra en la izquierda, busca en el derecho.
+  return findLevelRecursive(node->right, value, level + 1);
+}
+
+// Search Functions
+int GetTargetIDFromKeyBoard() {
+  int targetID = 0;
+  std::cout << "\x1b[33mtarget id: \x1b[0m";
+  std::cin >> targetID;
+  return targetID;
+}
+
+struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID) {
+  auto it = std::find_if(
+      inorderVector.begin(), inorderVector.end(),
+      [&](Node *&currentNode) { return currentNode->data.id == targetID; });
+
+  if (*it == nullptr) {
+    std::cout << "\x1b[31mNot Found\x1b[0m" << std::endl;
+    return nullptr;
+  }
+
+  return *it;
+}
+
+std::vector<Node *> SearchByName(std::vector<Node *> &inorderVector,
+                                 struct Person targetMember) {
+  if (inorderVector.empty()) {
+    std::cout << "\x1b[31mThere are not members on the tree\x1b[0m"
+              << std::endl;
+    return {};
+  }
+
+  std::vector<Node *> subVector;
+
+  for (auto &element : inorderVector) {
+    if (element->data.first_name == targetMember.first_name) {
+      subVector.push_back(element);
+    }
+  }
+
+  std::sort(inorderVector.begin(), inorderVector.end());
+  return subVector;
+}
+
+std::vector<Node *> SearchByLastName(std::vector<Node *> &inorderVector,
+                                     struct Person targetMember) {
+  if (inorderVector.empty()) {
+    std::cout << "\x1b[31mThere are not members on the tree\x1b[0m"
+              << std::endl;
+    return {};
+  }
+
+  std::vector<Node *> subVector;
+
+  for (auto &element : inorderVector) {
+    if (element->data.last_name == targetMember.last_name) {
+      subVector.push_back(element);
+    }
+  }
+
+  std::sort(inorderVector.begin(), inorderVector.end());
+  return subVector;
+}
+
+// Create functions
+struct Person CreateMemberFromKeyBoard(Tree *root) {
+  struct Person newMember;
+  newMember.id = 0;
+
+  std::cin.ignore();
+  std::cout << "first name: " << std::endl;
+  std::getline(std::cin, newMember.first_name);
+
+  std::cout << "last name: " << std::endl;
+  std::getline(std::cin, newMember.last_name);
+
+  std::cout << "genre: " << std::endl;
+  std::cin >> newMember.genre;
+
+  newMember.father = -1;
+  newMember.mother = -1;
+
+  return newMember;
+}
+
+struct Person GetMemberNamesFromKeyBoard() {
+  struct Person targetMember;
+  std::cin.ignore();
+  std::cout << "first name: " << std::endl;
+  std::getline(std::cin, targetMember.first_name);
+
+  std::cout << "first name: " << std::endl;
+  std::getline(std::cin, targetMember.first_name);
+  return targetMember;
+}
+
+void PrintInorderNodes(std::vector<Node *> inorderNodesCollection) {
+  for (size_t i = 0; i < inorderNodesCollection.size(); ++i) {
+    printPerson(inorderNodesCollection[i]->data);
+  }
 }
