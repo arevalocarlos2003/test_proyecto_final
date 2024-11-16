@@ -18,7 +18,15 @@ int main(int argc, char const *argv[]) {
   Tree *root = new Tree();
   root->insert(currentMember);
 
+  Node *node = nullptr;
+  Tree *subTree = nullptr;
+  std::string kinshipTitles;
+  std::string aux_name;
+  int currentLevel = 0;
+
   do {
+    node = nullptr;
+    subTree = nullptr;
     target = 0;
     inorderNodes.clear();
     inorderNodesSubVector.clear();
@@ -43,7 +51,6 @@ int main(int argc, char const *argv[]) {
       case 3:
         do {
           inorderNodesSubVector.clear();
-          Node *node = nullptr;
           ShowCLISearchOptions();
           std::cin >> option;
           switch (option) {
@@ -118,6 +125,44 @@ int main(int argc, char const *argv[]) {
 
       case 4:
         root->print2D();
+        break;
+
+      case 5:
+        root->inorderVector(inorderNodes);
+        target = GetTargetIDFromKeyBoard();
+        subTree = new Tree();
+        subTree->root = SearchByID(inorderNodes, target);
+        aux_name = subTree->root->data.first_name;
+        std::cout << "Member get: " << aux_name << std::endl;
+        target = GetTargetIDFromKeyBoard();
+        currentLevel =
+            subTree->findLevel(SearchByID(inorderNodes, target)->data);
+        if (currentLevel == -1) {
+          std::cout << std::endl
+                    << "\x1b[31mNot Found\x1b[0m" << std::endl
+                    << std::endl;
+          break;
+        }
+
+        if (SearchByID(inorderNodes, target)->data.genre == 'm') {
+          kinshipTitles = "father";
+        } else if (SearchByID(inorderNodes, target)->data.genre == 'f') {
+          kinshipTitles = "mother";
+        }
+
+        if (currentLevel >= 2) {
+          kinshipTitles.insert(0, "Grand");
+        }
+
+        if (currentLevel > 2) {
+          for (int i = 0; i < currentLevel - 2; ++i) {
+            kinshipTitles.insert(0, "great-");
+          }
+        }
+
+        std::cout << SearchByID(inorderNodes, target)->data.first_name
+                  << " is: " << aux_name << " " << kinshipTitles << std::endl;
+
         break;
 
       default:
