@@ -20,9 +20,7 @@ struct Person CreateMember(Tree *root) {
 }
 
 struct Person GetTargetData() {
-  std::cout << std::endl
-            << "\x1b[33mTarget position\x1b[0m" << std::endl
-            << std::endl;
+  std::cout << std::endl;
 
   struct Person targetMember;
   std::cout << "id: ";
@@ -52,6 +50,7 @@ int main(int argc, char const *argv[]) {
     std::cout << "1. Visualization Tree" << std::endl;
     std::cout << "2. Add member" << std::endl;
     std::cout << "3. Search member" << std::endl;
+    std::cout << "4. Delete member" << std::endl;
     std::cout << "8. exit" << std::endl;
 
     std::cin >> option;
@@ -82,7 +81,16 @@ int main(int argc, char const *argv[]) {
         std::cout << std::endl
                   << "\x1b[32mFound: \x1b[0m" << currentMember << std::endl;
         break;
-
+      case 4:
+      targetMember = GetTargetData();
+      if (root->find(targetMember) == nullptr){
+          std::cout << "Member not found" << std::endl;
+          break;
+        }
+        root->deleteMember(targetMember);
+        root->RelationSiblings(root->root, targetMember);
+        std::cout << "Member deleted and relation adjusted" << std::endl;
+      break;
       default:
         break;
     }

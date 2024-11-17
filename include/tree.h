@@ -40,6 +40,13 @@ class Tree {
   void setLastMember(int lastMember) { this->lastMember = lastMember; }
   int getLastMember() { return this->lastMember; }
   Node *find(const Person &value) const;
+  //eraseMember
+  Node *minNode(Node *node);
+  void deleteMember(const Person &target);
+  Node *eraseMemberConected(Node* node, const Person &targetMember);
+  void RelationFixed(Node* node, const Person& memberDelated);
+  void RelationSiblings(Node* node, const Person& memberDelated);
+
 
  private:
   int lastMember;
@@ -48,7 +55,7 @@ class Tree {
   void inorderRecursive(Node *node) const;
   void print2DRecursive(Node *root, int space) const;
   Node *findRecursive(Node *node, const Person &value) const;
-};
+  };
 
 void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember);
 

@@ -3,6 +3,7 @@
 // insert methods
 void Tree::insert(const Person &value) { insertRecursive(this->root, value); }
 
+
 void Tree::insertRecursive(Node *&node, Person value) {
   if (!node) {
     node = new Node(value);
@@ -91,6 +92,76 @@ void InsertFamilyMember(Tree *&root, Person targetPosition, Person newMember) {
   }
 
   subtree->insert(newMember);
-
+}
   // subtree_root->insert(newMember);
+
+
+
+// FUnction Delete 
+void Tree::deleteMember(const Person &targetMember) {
+  root = Tree::eraseMemberConected(root, targetMember);
+}
+
+Node *Tree::eraseMemberConected(Node* node, const Person &targetMember){
+if (node == nullptr)
+{
+    std::cout<<"There is no node to delete"<<std::endl;
+    return nullptr;
+}
+
+//Looking for the id in order to delete the member inorder
+if (targetMember.id < node->data.id){
+    node->left = eraseMemberConected(node->left, targetMember);
+}
+else if (targetMember.id > node->data.id){
+    node->right = eraseMemberConected(node->right, targetMember);
+}
+//Once it founds the Nodo 
+else{
+if (node->left == nullptr){
+    Node *temp = node->right;
+    delete node;
+    return temp;
+}
+else if(node->right == nullptr){
+ Node *temp = node->left;
+ delete node;
+ return temp;
+}
+
+Node *temp = minNode(node->right);
+node->data = temp->data;
+node->right = eraseMemberConected(node->right, temp->data);
+}
+return node;
+};
+//changing the side of the nodo
+Node *Tree::minNode(Node *node){
+    Node *current = node;
+    while (current && current->left !=nullptr){
+        current = current->left;
+    }
+    return current;
+}
+
+//Function fixed relation based on the ID 
+void Tree::RelationFixed(Node* node, const Person& memberDelated) {
+  if (node != nullptr){ 
+    return;
+  }
+  
+  if (node->data.genre == 'm'){
+    RelationFixed(node, memberDelated);
+  }
+
+  RelationFixed(node->left, memberDelated);
+  RelationFixed(node->right, memberDelated);
+}
+
+void Tree::RelationSiblings(Node* node, const Person& memberDelated) {
+  if (memberDelated.genre == 'm' && node->data.genre == 'm') {
+    node->data.id -= 1;
+  } else if (memberDelated.genre == 'f' && node->data.genre == 'f') {
+    node->data.id -= 1; 
+  }
 }
