@@ -13,22 +13,23 @@ void Tree::insertRecursive(Node *&node, Person value) {
   }
 }
 
-// inorder
-void Tree::inorder() const {
-  inorderRecursive(this->root);
+// updateRelations
+void Tree::updateRelations() const {
+  updateRelationsRecursive(this->root);
   std::cout << std::endl;
 }
 
-void Tree::inorderRecursive(Node *node) const {
+void Tree::updateRelationsRecursive(Node *node) const {
   if (node == nullptr) {
     return;
   }
-  inorderRecursive(node->left);
-  std::cout << node->data << " ";
-  inorderRecursive(node->right);
+  updateRelationsRecursive(node->left);
+  if (node->left != nullptr) node->data.mother = node->left->data.id;
+  if (node->right != nullptr) node->data.father = node->right->data.id;
+  updateRelationsRecursive(node->right);
 }
 
-// inorder vector
+// updateRelations vector
 void Tree::inorderVector(std::vector<Node *> &nodes) const {
   inorderRecursiveVector(this->root, nodes);
   std::cout << std::endl;

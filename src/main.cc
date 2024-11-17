@@ -30,6 +30,7 @@ int main(int argc, char const *argv[]) {
     target = 0;
     inorderNodes.clear();
     inorderNodesSubVector.clear();
+    root->updateRelations();
     ShowCLIMenuOptions();
     std::cout << "\x1b[34mOption: \x1b[0m";
     std::cin >> option;
@@ -45,7 +46,10 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 2:
-        /* code */
+        root->inorderVector(inorderNodes);
+        for (auto element : inorderNodes) {
+          printPerson(element->data);
+        }
         break;
 
       case 3:
@@ -128,12 +132,21 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 5:
+        std::cout << std::endl
+                  << "\x1b[32mPrint relations\x1b[0m" << std::endl
+                  << std::endl;
         root->inorderVector(inorderNodes);
+        std::cout << std::endl
+                  << "\x1b[32mFrom Member\x1b[0m" << std::endl
+                  << std::endl;
         target = GetTargetIDFromKeyBoard();
         subTree = new Tree();
         subTree->root = SearchByID(inorderNodes, target);
         aux_name = subTree->root->data.first_name;
         std::cout << "Member get: " << aux_name << std::endl;
+        std::cout << std::endl
+                  << "\x1b[32mTo Member\x1b[0m" << std::endl
+                  << std::endl;
         target = GetTargetIDFromKeyBoard();
         currentLevel =
             subTree->findLevel(SearchByID(inorderNodes, target)->data);
