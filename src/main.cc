@@ -18,9 +18,18 @@ struct Person CreateMember(Tree *root) {
   std::cout << std::endl;
   return newMember;
 }
+struct Person addRelation(struct Person &id);
+struct Person addRelation(struct Person &id){
+  struct Person targetMember; 
+  targetMember.relation = targetMember.id + 1;
+  return targetMember;
+
+};
 
 struct Person GetTargetData() {
-  std::cout << std::endl;
+  std::cout << std::endl
+            << "\x1b[33mTarget position\x1b[0m" << std::endl
+            << std::endl;
 
   struct Person targetMember;
   std::cout << "id: ";
@@ -32,8 +41,9 @@ struct Person GetTargetData() {
 
   std::cout << "genre: ";
   std::cin >> targetMember.genre;
+  targetMember.relation = targetMember.id +1;
 
-  targetMember.relation = 0;
+  addRelation(targetMember);
 
   return targetMember;
 }

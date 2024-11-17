@@ -144,7 +144,7 @@ Node *Tree::minNode(Node *node){
     return current;
 }
 
-//Function fixed relation based on the ID 
+//Function fixed relation based on the ID 'Not completed'
 void Tree::RelationFixed(Node* node, const Person& memberDelated) {
   if (node != nullptr){ 
     return;
@@ -160,8 +160,8 @@ void Tree::RelationFixed(Node* node, const Person& memberDelated) {
 
 void Tree::RelationSiblings(Node* node, const Person& memberDelated) {
   if (memberDelated.genre == 'm' && node->data.genre == 'm') {
-    node->data.id -= 1;
+    node->data.relation -= 1;
   } else if (memberDelated.genre == 'f' && node->data.genre == 'f') {
-    node->data.id -= 1; 
+    node->data.relation -= 1; 
   }
 }
