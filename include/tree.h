@@ -37,7 +37,7 @@ class Tree {
   ~Tree() {}
 
   void insert(const Person &value);
-  void inorder() const;
+  void updateRelations() const;
   void inorderVector(std::vector<Node *> &nodes) const;
   void print2D() const;
 
@@ -54,7 +54,7 @@ class Tree {
   int currentLevel;
 
   void insertRecursive(Node *&node, Person value);
-  void inorderRecursive(Node *node) const;
+  void updateRelationsRecursive(Node *node) const;
   void inorderRecursiveVector(Node *node, std::vector<Node *> &nodes) const;
   void print2DRecursive(Node *root, int space) const;
   Node *findSubTreeRecursive(Node *node, const int &value) const;
@@ -69,7 +69,7 @@ struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID);
 std::vector<Node *> SearchByName(std::vector<Node *> &inorderVector,
                                  struct Person targetMember);
 std::vector<Node *> SearchByLastName(std::vector<Node *> &inorderVector,
-                                 struct Person targetMember);
+                                     struct Person targetMember);
 
 // Create From KeyBoard Functions
 struct Person CreateMemberFromKeyBoard(Tree *root);
