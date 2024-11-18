@@ -44,8 +44,8 @@ class Tree {
   Node *minNode(Node *node);
   void deleteMember(const Person &target);
   Node *eraseMemberConected(Node* node, const Person &targetMember);
-  void RelationFixed(Node* node, const Person& memberDelated);
-  void RelationSiblings(Node* node, const Person& memberDelated);
+  void RelationFixed(Node* node, const Person &memberDelated);
+  void RelationSiblings(Node* node, const Person &memberDelated);
 
 
  private:
