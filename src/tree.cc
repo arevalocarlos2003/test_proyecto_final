@@ -160,8 +160,8 @@ void Tree::RelationFixed(Node* node, const Person& memberDelated) {
 
 void Tree::RelationSiblings(Node* node, const Person& memberDelated) {
   if (memberDelated.genre == 'm' && node->data.genre == 'm') {
-    node->data.relation -= 1;
+    node->data.mother -= 1;
   } else if (memberDelated.genre == 'f' && node->data.genre == 'f') {
-    node->data.relation -= 1; 
+    node->data.father -= 1; 
   }
 }
