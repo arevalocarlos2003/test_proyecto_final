@@ -39,6 +39,7 @@ class Tree {
   void insert(const Person &value);
   void updateRelations() const;
   void inorderVector(std::vector<Node *> &nodes) const;
+  void inorderPersonVector(std::vector<Person> &nodes) const;
   void print2D() const;
 
   void setLastMember(int lastMember) { this->lastMember = lastMember; }
@@ -56,16 +57,21 @@ class Tree {
   void insertRecursive(Node *&node, Person value);
   void updateRelationsRecursive(Node *node) const;
   void inorderRecursiveVector(Node *node, std::vector<Node *> &nodes) const;
+  void inorderPersonRecursiveVector(Node *node,
+                                    std::vector<Person> &nodes) const;
   void print2DRecursive(Node *root, int space) const;
   Node *findSubTreeRecursive(Node *node, const int &value) const;
   int findLevelRecursive(Node *root, const Person &value, int level) const;
 };
 
 void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember);
+void InsertFamilyMemberFromVector(Tree *&root, int targetPosition, Person newMember, int id);
 
 // Search Functions
 int GetTargetIDFromKeyBoard();
 struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID);
+struct Person SearchPersonByID(std::vector<Person> &inorderVector,
+                               int targetID);
 std::vector<Node *> SearchByName(std::vector<Node *> &inorderVector,
                                  struct Person targetMember);
 std::vector<Node *> SearchByLastName(std::vector<Node *> &inorderVector,
@@ -76,5 +82,7 @@ struct Person CreateMemberFromKeyBoard(Tree *root);
 struct Person GetMemberNamesFromKeyBoard();
 
 void PrintInorderNodes(std::vector<Node *> inorderNodesCollection);
+
+void BuildTreeFromVector(std::vector<Person> &personCollection);
 
 #endif  // TREE_H

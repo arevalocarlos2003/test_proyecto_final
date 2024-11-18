@@ -1,8 +1,8 @@
 #include "person.h"
 
 std::ostream &operator<<(std::ostream &os, const Person &person) {
-  os << "[" << person.id << "| " << person.first_name << "| "
-     << person.last_name << "| " << person.genre << "]";
+  os << "[" << person.id << "| " << person.first_name << "| " << person.genre
+     << "| " << person.father << "| " << person.mother << "]";
   return os;
 }
 
