@@ -14,7 +14,6 @@ struct Person CreateMember(Tree *root) {
   std::getline(std::cin, newMember.name);
   std::cout << "f:(mom) m(dad): ";
   std::cin >> newMember.genre;
-  newMember.relation = 0;
   std::cout << std::endl;
   return newMember;
 }
