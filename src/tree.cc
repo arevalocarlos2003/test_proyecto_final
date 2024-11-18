@@ -132,6 +132,7 @@ else if(node->right == nullptr){
 Node *temp = minNode(node->right);
 node->data = temp->data;
 node->right = eraseMemberConected(node->right, temp->data);
+std::cout << "Member deleted and relation adjusted" << std::endl;
 }
 return node;
 };

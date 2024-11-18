@@ -11,19 +11,12 @@ struct Person CreateMember(Tree *root) {
   newMember.id = 0;
   std::cout << "name: ";
   std::cin.ignore();
-  std::getline(std::cin, newMember.name);
+  std::getline(std::cin, newMember.first_name);
   std::cout << "f:(mom) m(dad): ";
   std::cin >> newMember.genre;
   std::cout << std::endl;
   return newMember;
 }
-struct Person addRelation(struct Person &id);
-struct Person addRelation(struct Person &id){
-  struct Person targetMember; 
-  targetMember.relation = targetMember.id + 1;
-  return targetMember;
-
-};
 
 struct Person GetTargetData() {
   std::cout << std::endl
@@ -36,21 +29,18 @@ struct Person GetTargetData() {
 
   std::cout << "name: ";
   std::cin.ignore();
-  std::getline(std::cin, targetMember.name);
+  std::getline(std::cin, targetMember.first_name);
 
   std::cout << "genre: ";
   std::cin >> targetMember.genre;
-  targetMember.relation = targetMember.id +1;
-
-  addRelation(targetMember);
-
   return targetMember;
 }
+void ShowDELETESearchOptions();
 
 int main(int argc, char const *argv[]) {
   int option = 0;
 
-  Person currentMember = {0, "Carlos", 'm', 0};
+  Person currentMember = {0, "Carlos", "Arevalo",'m', -1, -1};
   Person targetMember;
   Tree *root = new Tree();
   root->insert(currentMember);
@@ -82,7 +72,7 @@ int main(int argc, char const *argv[]) {
       case 3:
         targetMember = GetTargetData();
         if (root->find(targetMember) == nullptr) {
-          std::cout << "Member: " << targetMember.name
+          std::cout << "Member: " << targetMember.first_name
                     << "\x1b[31m Not found\x1b[0m" << std::endl;
           break;
         }
@@ -91,7 +81,13 @@ int main(int argc, char const *argv[]) {
                   << "\x1b[32mFound: \x1b[0m" << currentMember << std::endl;
         break;
       case 4:
-      targetMember = GetTargetData();
+      ShowDELETESearchOptions();
+      int option2;
+      std::cin >> option2;
+      switch (option2)
+      {
+      case 1:
+        targetMember = GetTargetData();
       if (root->find(targetMember) == nullptr){
           std::cout << "Member not found" << std::endl;
           break;
@@ -100,6 +96,30 @@ int main(int argc, char const *argv[]) {
         root->RelationSiblings(root->root, targetMember);
         std::cout << "Member deleted and relation adjusted" << std::endl;
       break;
+        break;
+      case 2:
+        targetMember = GetTargetData();
+      if (root->find(targetMember) == nullptr){
+          std::cout << "Member not found" << std::endl;
+          break;
+        }
+        root->deleteData(root->root, targetMember);
+        break;
+      case 3:
+        targetMember = GetTargetData();
+      if (root->find(targetMember) == nullptr){
+          std::cout << "Member not found" << std::endl;
+          break;
+        }
+        root->update_same_nodo(root->root, targetMember);
+        break;
+        break;
+      case 4:
+        break;
+      
+      default:
+        break;
+      }
       default:
         break;
     }
@@ -107,4 +127,15 @@ int main(int argc, char const *argv[]) {
 
   delete root;
   return 0;
+}
+
+
+void ShowDELETESearchOptions() {
+  std::cout << std::endl
+            << "\x1b[31mSearch Options\x1b[0m" << std::endl
+            << std::endl;
+  std::cout << "1. Delete all info of Member" << std::endl;
+  std::cout << "2. Delete data leaving id" << std::endl;
+  std::cout << "3. making an update of the Member" << std::endl;
+  std::cout << "4. Back Main Menu" << std::endl << std::endl;
 }
