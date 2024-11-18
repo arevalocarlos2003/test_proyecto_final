@@ -34,12 +34,14 @@ int main(int argc, char const *argv[]) {
     root->updateRelations();
     ShowCLIMenuOptions();
     std::cout << "\x1b[34mOption: \x1b[0m";
-    std::cin >> option;
+    option = intInputHandler();
+
     switch (option) {
       case 1:
         root->print2D();
         std::cout << std::endl
-                  << "\x1b[35mInsert Family Member\x1b[0m" << std::endl;
+                  << "\x1b[35mInsert Family Member\x1b[0m" << std::endl
+                  << std::endl;
         std::cout << "\x1b[33mTarget ID\x1b[0m" << std::endl;
         target = GetTargetIDFromKeyBoard();
         newMember = CreateMemberFromKeyBoard(root);
@@ -50,8 +52,10 @@ int main(int argc, char const *argv[]) {
         inorderPerson.clear();
         root->inorderPersonVector(inorderPerson);
         std::sort(inorderPerson.begin(), inorderPerson.end());
-        BuildTreeFromVector(inorderPerson);
+        root->deleteTree();
+        root = BuildTreeFromVector(inorderPerson);
         root->updateRelations();
+        root->print2D();
         break;
 
       case 3:
@@ -59,7 +63,7 @@ int main(int argc, char const *argv[]) {
           inorderNodes.clear();
           inorderNodesSubVector.clear();
           ShowCLISearchOptions();
-          std::cin >> option;
+          option = intInputHandler();
           switch (option) {
             case 1:
               root->inorderVector(inorderNodes);
@@ -190,6 +194,7 @@ int main(int argc, char const *argv[]) {
     }
   } while (option != 8);
 
+  root->deleteTree();
   delete root;
   return 0;
 }

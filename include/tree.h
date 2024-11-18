@@ -2,9 +2,11 @@
 #define TREE_H
 
 #include <algorithm>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
+#include "iohandlers.h"
 #include "person.h"
 
 struct Person;
@@ -37,6 +39,7 @@ class Tree {
   ~Tree() {}
 
   void insert(const Person &value);
+  void deleteTree();
   void updateRelations() const;
   void inorderVector(std::vector<Node *> &nodes) const;
   void inorderPersonVector(std::vector<Person> &nodes) const;
@@ -55,6 +58,7 @@ class Tree {
   int currentLevel;
 
   void insertRecursive(Node *&node, Person value);
+  void deleteTreeRecursive(Node *&node);
   void updateRelationsRecursive(Node *node) const;
   void inorderRecursiveVector(Node *node, std::vector<Node *> &nodes) const;
   void inorderPersonRecursiveVector(Node *node,
@@ -65,7 +69,8 @@ class Tree {
 };
 
 void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember);
-void InsertFamilyMemberFromVector(Tree *&root, int targetPosition, Person newMember, int id);
+void InsertFamilyMemberFromVector(Tree *&root, int targetPosition,
+                                  Person newMember, int id);
 
 // Search Functions
 int GetTargetIDFromKeyBoard();
@@ -83,6 +88,6 @@ struct Person GetMemberNamesFromKeyBoard();
 
 void PrintInorderNodes(std::vector<Node *> inorderNodesCollection);
 
-void BuildTreeFromVector(std::vector<Person> &personCollection);
+Tree *BuildTreeFromVector(std::vector<Person> &personCollection);
 
 #endif  // TREE_H

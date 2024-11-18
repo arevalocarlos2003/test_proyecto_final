@@ -62,7 +62,9 @@ void Tree::inorderPersonRecursiveVector(Node *node,
 
 // Print2D
 void Tree::print2D() const {
-  std::cout << "\x1b[32mTree Visualization\x1b[0m" << std::endl << std::endl;
+  std::cout << std::endl
+            << "\x1b[32mTree Visualization\x1b[0m" << std::endl
+            << std::endl;
   print2DRecursive(this->root, 0);
   std::cout << std::endl << std::endl;
 }
@@ -114,17 +116,35 @@ void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
   subtree->root = root->findSubTree(targetPosition);
 
   root->setLastMember(root->getLastMember() + 1);
+  if (subtree->root == nullptr) {
+    std::cout << std::endl
+              << "\x1b[31mMember with id: " << targetPosition
+              << " not found\x1b[0m" << std::endl
+              << std::endl;
+    return;
+  }
   newMember.id = root->getLastMember();
 
-  // if (subtree_root->root == nullptr) {
+  if ((newMember.genre == 'm') && (subtree->root->data.father != -1)) {
+    std::cout << std::endl
+              << "\x1b[33mThis member already has a father\x1b[0m" << std::endl
+              << std::endl;
+    return;
+  }
+
+  if ((newMember.genre == 'f') && (subtree->root->data.mother != -1)) {
+    std::cout << std::endl
+              << "\x1b[33mThis member already has a mother\x1b[0m" << std::endl
+              << std::endl;
+    return;
+  }
+
   if (subtree == nullptr) {
     std::cout << "\x1b[31mTarget family member not found\x1b[0m" << std::endl;
     return;
   }
 
   subtree->insert(newMember);
-
-  // subtree_root->insert(newMember);
 }
 
 void InsertFamilyMemberFromVector(Tree *&root, int targetPosition,
@@ -173,7 +193,7 @@ int Tree::findLevelRecursive(Node *node, const Person &value, int level) const {
 int GetTargetIDFromKeyBoard() {
   int targetID = 0;
   std::cout << "\x1b[33mtarget id: \x1b[0m";
-  std::cin >> targetID;
+  targetID = intInputHandler();
   return targetID;
 }
 
@@ -256,7 +276,7 @@ struct Person CreateMemberFromKeyBoard(Tree *root) {
   std::getline(std::cin, newMember.last_name);
 
   std::cout << "genre: " << std::endl;
-  std::cin >> newMember.genre;
+  newMember.genre = genderInputHandler();
 
   newMember.father = -1;
   newMember.mother = -1;
@@ -276,12 +296,23 @@ struct Person GetMemberNamesFromKeyBoard() {
 }
 
 void PrintInorderNodes(std::vector<Node *> inorderNodesCollection) {
+  const int kMaxSpace = 15;
+  std::sort(inorderNodesCollection.begin(), inorderNodesCollection.end());
+  Person currentPerson;
+  std::cout << std::endl
+            << std::left << std::setw(kMaxSpace) << "id: " << std::left
+            << std::setw(kMaxSpace) << "first name" << std::left
+            << std::setw(kMaxSpace) << "last name" << std::endl;
   for (size_t i = 0; i < inorderNodesCollection.size(); ++i) {
-    printPerson(inorderNodesCollection[i]->data);
+    currentPerson = inorderNodesCollection[i]->data;
+    std::cout << std::left << std::setw(kMaxSpace) << currentPerson.id
+              << std::left << std::setw(kMaxSpace) << currentPerson.first_name
+              << std::left << std::setw(kMaxSpace) << currentPerson.last_name
+              << std::endl;
   }
 }
 
-void BuildTreeFromVector(std::vector<Person> &personCollection) {
+Tree *BuildTreeFromVector(std::vector<Person> &personCollection) {
   std::sort(personCollection.begin(), personCollection.end());
   Tree *treeFromVector = new Tree();
   Person currentMember;
@@ -304,5 +335,16 @@ void BuildTreeFromVector(std::vector<Person> &personCollection) {
     }
   }
 
-  treeFromVector->print2D();
+  return treeFromVector;
+}
+
+void Tree::deleteTree() { this->deleteTreeRecursive(this->root); }
+
+void Tree::deleteTreeRecursive(Node *&root) {
+  if (root == nullptr) return;
+
+  deleteTreeRecursive(root->left);
+  deleteTreeRecursive(root->right);
+  std::cout << "Deleting node: " << root->data << std::endl;
+  delete root;
 }
