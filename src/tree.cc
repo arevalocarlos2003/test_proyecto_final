@@ -165,3 +165,50 @@ void Tree::RelationSiblings(Node* node, const Person& memberDelated) {
     node->data.father -= 1; 
   }
 }
+
+Node  *Tree::deleteData(Node* node, const Person &targetMember){
+  if (targetMember.id < node->data.id){
+    node->left = eraseMemberConected(node->left, targetMember);
+}
+else if (targetMember.id > node->data.id){
+    node->right = eraseMemberConected(node->right, targetMember);
+}
+//Once it founds the Nodo 
+else{
+    node->data.first_name = nullptr;
+    node->data.last_name = nullptr;
+    node->data.genre = 'N';
+}
+return node;
+};
+Node *Tree::update_same_nodo(Node* node, const Person &targetMember){
+  if (targetMember.id < node->data.id){
+    node->left = eraseMemberConected(node->left, targetMember);
+  }
+  else if (targetMember.id > node->data.id){
+    node->right = eraseMemberConected(node->right, targetMember);
+  }
+  else{
+    std::cout << std::endl
+            << "\x1b[32mUpdating the member\x1b[0m" << std::endl
+            << std::endl;
+  std::cout << "first name: ";
+  std::cin.ignore();
+  std::getline(std::cin, node->data.first_name);
+  std::cout << "Last name: ";
+  std::cin.ignore();
+  std::getline(std::cin, node->data.last_name);
+  char genre;
+  std::cout << "New genre f:(mom) m(dad): ";
+  std::cin >> genre;
+  node->data.genre = genre;
+  std::cout<<std::endl;
+  std::cout<<"The new info it is: "<<std::endl;
+  std::cout<<"First name: "<< node->data.first_name<<std::endl;
+  std::cout<<"Last name: "<< node->data.last_name<<std::endl;
+  std::cout<<"Genre: "<< node->data.genre<<std::endl;
+  }
+  return node;
+
+
+  };
