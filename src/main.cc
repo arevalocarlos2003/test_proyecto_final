@@ -15,6 +15,7 @@ int main(int argc, char const *argv[]) {
 
   std::vector<Node *> inorderNodes;
   std::vector<Node *> inorderNodesSubVector;
+  std::vector<Person> inorderPerson;
   Tree *root = new Tree();
   root->insert(currentMember);
 
@@ -46,14 +47,16 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 2:
-        root->inorderVector(inorderNodes);
-        for (auto element : inorderNodes) {
-          printPerson(element->data);
-        }
+        inorderPerson.clear();
+        root->inorderPersonVector(inorderPerson);
+        std::sort(inorderPerson.begin(), inorderPerson.end());
+        BuildTreeFromVector(inorderPerson);
+        root->updateRelations();
         break;
 
       case 3:
         do {
+          inorderNodes.clear();
           inorderNodesSubVector.clear();
           ShowCLISearchOptions();
           std::cin >> option;
@@ -175,6 +178,10 @@ int main(int argc, char const *argv[]) {
 
         std::cout << SearchByID(inorderNodes, target)->data.first_name
                   << " is: " << aux_name << " " << kinshipTitles << std::endl;
+
+        break;
+
+      case 9:
 
         break;
 

@@ -45,6 +45,21 @@ void Tree::inorderRecursiveVector(Node *node,
   inorderRecursiveVector(node->right, nodes);
 }
 
+void Tree::inorderPersonVector(std::vector<Person> &memberVector) const {
+  inorderPersonRecursiveVector(this->root, memberVector);
+  std::cout << std::endl;
+}
+
+void Tree::inorderPersonRecursiveVector(Node *node,
+                                        std::vector<Person> &nodes) const {
+  if (node == nullptr) {
+    return;
+  }
+  inorderPersonRecursiveVector(node->left, nodes);
+  nodes.push_back(node->data);
+  inorderPersonRecursiveVector(node->right, nodes);
+}
+
 // Print2D
 void Tree::print2D() const {
   std::cout << "\x1b[32mTree Visualization\x1b[0m" << std::endl << std::endl;
@@ -112,6 +127,24 @@ void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
   // subtree_root->insert(newMember);
 }
 
+void InsertFamilyMemberFromVector(Tree *&root, int targetPosition,
+                                  Person newMember, int id) {
+  Tree *subtree = new Tree();
+  subtree->root = root->findSubTree(targetPosition);
+
+  newMember.id = id;
+
+  // if (subtree_root->root == nullptr) {
+  if (subtree == nullptr) {
+    std::cout << "\x1b[31mTarget family member not found\x1b[0m" << std::endl;
+    return;
+  }
+
+  subtree->insert(newMember);
+
+  // subtree_root->insert(newMember);
+}
+
 // findSubTree level methods
 int Tree::findLevel(const Person &value) const {
   return findLevelRecursive(this->root, value, 0);
@@ -152,6 +185,19 @@ struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID) {
   if (*it == nullptr) {
     std::cout << "\x1b[31mNot Found\x1b[0m" << std::endl;
     return nullptr;
+  }
+
+  return *it;
+}
+
+struct Person SearchPersonByID(std::vector<Person> &inorderVector,
+                               int targetID) {
+  auto it = std::find_if(
+      inorderVector.begin(), inorderVector.end(),
+      [&](Person &currentNode) { return currentNode.id == targetID; });
+
+  if (it == inorderVector.end()) {
+    return {};
   }
 
   return *it;
@@ -233,4 +279,30 @@ void PrintInorderNodes(std::vector<Node *> inorderNodesCollection) {
   for (size_t i = 0; i < inorderNodesCollection.size(); ++i) {
     printPerson(inorderNodesCollection[i]->data);
   }
+}
+
+void BuildTreeFromVector(std::vector<Person> &personCollection) {
+  std::sort(personCollection.begin(), personCollection.end());
+  Tree *treeFromVector = new Tree();
+  Person currentMember;
+  Person mother;
+  Person father;
+  // Inserts root
+  treeFromVector->insert(personCollection[0]);
+
+  for (size_t i = 0; i < personCollection.size(); ++i) {
+    currentMember = personCollection[i];
+    if (currentMember.father != -1) {
+      father = SearchPersonByID(personCollection, currentMember.father);
+      InsertFamilyMemberFromVector(treeFromVector, currentMember.id, father,
+                                   currentMember.father);
+    }
+    if (currentMember.mother != -1) {
+      mother = SearchPersonByID(personCollection, currentMember.mother);
+      InsertFamilyMemberFromVector(treeFromVector, currentMember.id, mother,
+                                   currentMember.mother);
+    }
+  }
+
+  treeFromVector->print2D();
 }
