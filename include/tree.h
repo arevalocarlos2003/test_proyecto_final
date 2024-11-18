@@ -46,6 +46,11 @@ class Tree {
   Node *eraseMemberConected(Node* node, const Person &targetMember);
   void RelationFixed(Node* node, const Person &memberDelated);
   void RelationSiblings(Node* node, const Person &memberDelated);
+  void ShowDELETESearchOptions();
+
+  //Erase only the data not the node (leaving the id)
+  Node *deleteData(Node* node, const Person &targetMember);
+  Node *update_same_nodo(Node* node, const Person &targetMember);
 
 
  private:
