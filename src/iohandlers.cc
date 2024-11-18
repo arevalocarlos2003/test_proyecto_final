@@ -28,3 +28,21 @@ char genderInputHandler() {
   }
   return gender;
 }
+
+// File management
+bool ListCurrentPathFiles() {
+  std::filesystem::path currentPath = std::filesystem::current_path();
+  std::cout << "Files in this directory: " << currentPath << std::endl;
+  int numberOfFiles = 0;
+
+  for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
+    std::string fileName = entry.path().filename().string();
+    if (entry.is_regular_file() &&
+        fileName.rfind(".csv") == fileName.size() - 4) {
+      std::cout << "|-- \x1b[32m" << fileName << "\x1b[0m" << std::endl;
+      numberOfFiles++;
+    }
+  }
+
+  return numberOfFiles == 0;
+}

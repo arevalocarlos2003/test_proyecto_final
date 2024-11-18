@@ -185,8 +185,8 @@ int main(int argc, char const *argv[]) {
 
         break;
 
-      case 9:
-
+      case 6:
+        ListCurrentPathFiles();
         break;
 
       default:
