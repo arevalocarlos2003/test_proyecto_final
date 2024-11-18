@@ -46,3 +46,39 @@ bool ListCurrentPathFiles() {
 
   return numberOfFiles == 0;
 }
+
+void GetInorderPeopleFromFile(const std::string& fileName,
+                              std::vector<Person>& personCollection) {
+  std::fstream peopleFile;
+  peopleFile.open(fileName, std::ios::in);
+
+  if (!peopleFile.is_open()) {
+    std::cout << std::endl
+              << "\x1b[31mError trying opening this file: \x1b[0m" << fileName
+              << std::endl;
+  }
+
+  std::string currentLine;
+  Person currentPerson;
+  std::string auxConvertion;
+  while (std::getline(peopleFile, currentLine)) {
+    std::stringstream currentLineStream(currentLine);
+    std::getline(currentLineStream, auxConvertion, ',');
+    currentPerson.id = std::stoi(auxConvertion);
+    auxConvertion.clear();
+    std::getline(currentLineStream, currentPerson.first_name, ',');
+    std::getline(currentLineStream, currentPerson.last_name, ',');
+    std::getline(currentLineStream, auxConvertion, ',');
+    currentPerson.genre = auxConvertion[0];
+    auxConvertion.clear();
+    std::getline(currentLineStream, auxConvertion, ',');
+    currentPerson.father = std::stoi(auxConvertion);
+    auxConvertion.clear();
+    std::getline(currentLineStream, auxConvertion, ',');
+    currentPerson.mother = std::stoi(auxConvertion);
+    std::cout << currentPerson << std::endl;
+    personCollection.push_back(currentPerson);
+  }
+
+  peopleFile.close();
+}

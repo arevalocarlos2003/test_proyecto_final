@@ -8,6 +8,7 @@
 int main(int argc, char const *argv[]) {
   int option = 0;
   int target = 0;
+  std::string fileName;
 
   Person currentMember = {0, "Carlos", "Arevalo", 'm', -1, -1};
   Person targetMember;
@@ -186,7 +187,18 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 6:
+        inorderPerson.clear();
         ListCurrentPathFiles();
+        std::cin.ignore();
+        std::cout << "filename: " << std::endl;
+        std::getline(std::cin, fileName);
+
+        GetInorderPeopleFromFile(fileName, inorderPerson);
+        std::sort(inorderPerson.begin(), inorderPerson.end());
+        root->deleteTree();
+        root = BuildTreeFromVector(inorderPerson);
+        root->updateRelations();
+        // root->print2D();
         break;
 
       default:
