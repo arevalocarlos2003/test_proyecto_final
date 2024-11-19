@@ -195,6 +195,9 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 6:
+        std::cout << std::endl
+                  << "\x1b[33mImport Tree\x1b[0m" << std::endl
+                  << std::endl;
         inorderPerson.clear();
         ListCurrentPathFiles();
         std::cin.ignore();
