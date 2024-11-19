@@ -62,9 +62,6 @@ void Tree::inorderPersonRecursiveVector(Node *node,
 
 // Print2D
 void Tree::print2D() const {
-  std::cout << std::endl
-            << "\x1b[32mTree Visualization\x1b[0m" << std::endl
-            << std::endl;
   print2DRecursive(this->root, 0);
   std::cout << std::endl << std::endl;
 }
@@ -202,7 +199,7 @@ struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID) {
       [&](Node *&currentNode) { return currentNode->data.id == targetID; });
 
   if (*it == nullptr) {
-    std::cout << "\x1b[31mNot Found\x1b[0m" << std::endl;
+    std::cout << std::endl << "\x1b[31mNot Found\x1b[0m" << std::endl;
     return nullptr;
   }
 

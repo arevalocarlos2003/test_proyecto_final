@@ -40,10 +40,13 @@ int main(int argc, char const *argv[]) {
       case 1:
         root->print2D();
         std::cout << std::endl
-                  << "\x1b[35mInsert Family Member\x1b[0m" << std::endl
+                  << "\x1b[32mInsert Family Member\x1b[0m" << std::endl
                   << std::endl;
-        std::cout << "\x1b[33mTarget ID\x1b[0m" << std::endl;
+        std::cout << std::endl
+                  << "\x1b[33mTarget ID\x1b[0m" << std::endl
+                  << std::endl;
         target = GetTargetIDFromKeyBoard();
+        std::cout << std::endl;
         newMember = CreateMemberFromKeyBoard(root);
         InsertFamilyMember(root, target, newMember);
         break;
@@ -68,8 +71,11 @@ int main(int argc, char const *argv[]) {
             case 1:
               root->inorderVector(inorderNodes);
               std::cout << "Search By ID" << std::endl << std::endl;
-              node = new Node(
-                  SearchByID(inorderNodes, GetTargetIDFromKeyBoard())->data);
+              node = new Node();
+              node = SearchByID(inorderNodes, GetTargetIDFromKeyBoard());
+              if (node == nullptr) {
+                break;
+              }
               printPerson(node->data);
               break;
             case 2:
@@ -135,6 +141,9 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 4:
+        std::cout << std::endl
+                  << "\x1b[32mTree Visualization\x1b[0m" << std::endl
+                  << std::endl;
         root->print2D();
         break;
 
@@ -189,7 +198,7 @@ int main(int argc, char const *argv[]) {
         inorderPerson.clear();
         ListCurrentPathFiles();
         std::cin.ignore();
-        std::cout << "filename: " << std::endl;
+        std::cout << std::endl << "filename: ";
         std::getline(std::cin, fileName);
 
         GetInorderPeopleFromFile(fileName, inorderPerson);
