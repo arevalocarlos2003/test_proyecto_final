@@ -197,7 +197,21 @@ int main(int argc, char const *argv[]) {
         root->deleteTree();
         root = BuildTreeFromVector(inorderPerson);
         root->updateRelations();
-        // root->print2D();
+        std::cout << std::endl
+                  << "\x1b[33mImported data\x1b[0m" << std::endl
+                  << std::endl;
+        root->print2D();
+        break;
+
+      case 7:
+        inorderPerson.clear();
+        root->inorderPersonVector(inorderPerson);
+        std::cin.ignore();
+        do {
+          std::cout << "Enter name for the new family tree export: ";
+          std::getline(std::cin, fileName);
+        } while (!VerifyFileNameAvailability(fileName));
+        ExportInorderPeopleFromVector(fileName, inorderPerson);
         break;
 
       default:

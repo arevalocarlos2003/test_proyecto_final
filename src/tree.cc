@@ -115,7 +115,6 @@ void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
   Tree *subtree = new Tree();
   subtree->root = root->findSubTree(targetPosition);
 
-  root->setLastMember(root->getLastMember() + 1);
   if (subtree->root == nullptr) {
     std::cout << std::endl
               << "\x1b[31mMember with id: " << targetPosition
@@ -123,7 +122,6 @@ void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
               << std::endl;
     return;
   }
-  newMember.id = root->getLastMember();
 
   if ((newMember.genre == 'm') && (subtree->root->data.father != -1)) {
     std::cout << std::endl
@@ -143,7 +141,8 @@ void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
     std::cout << "\x1b[31mTarget family member not found\x1b[0m" << std::endl;
     return;
   }
-
+  root->setLastMember(root->getLastMember() + 1);
+  newMember.id = root->getLastMember();
   subtree->insert(newMember);
 }
 
@@ -314,12 +313,12 @@ void PrintInorderNodes(std::vector<Node *> inorderNodesCollection) {
 
 Tree *BuildTreeFromVector(std::vector<Person> &personCollection) {
   std::sort(personCollection.begin(), personCollection.end());
-  Tree *treeFromVector = new Tree();
   Person currentMember;
   Person mother;
   Person father;
   // Inserts root
-  treeFromVector->insert(personCollection[0]);
+  Tree *treeFromVector = new Tree(personCollection[0]);
+  int lastMember = 0;
 
   for (size_t i = 0; i < personCollection.size(); ++i) {
     currentMember = personCollection[i];
@@ -335,6 +334,11 @@ Tree *BuildTreeFromVector(std::vector<Person> &personCollection) {
     }
   }
 
+  if (currentMember.id > lastMember) lastMember = currentMember.id;
+  if (father.id > lastMember) lastMember = father.id;
+  if (mother.id > lastMember) lastMember = mother.id;
+  treeFromVector->setLastMember(lastMember);
+
   return treeFromVector;
 }
 
@@ -345,6 +349,6 @@ void Tree::deleteTreeRecursive(Node *&root) {
 
   deleteTreeRecursive(root->left);
   deleteTreeRecursive(root->right);
-  std::cout << "Deleting node: " << root->data << std::endl;
+  // std::cout << "Deleting node: " << root->data << std::endl;
   delete root;
 }

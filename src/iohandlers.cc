@@ -61,6 +61,9 @@ void GetInorderPeopleFromFile(const std::string& fileName,
   std::string currentLine;
   Person currentPerson;
   std::string auxConvertion;
+  std::cout << std::endl
+            << "\x1b[32mFile data received\x1b[0m" << std::endl
+            << std::endl;
   while (std::getline(peopleFile, currentLine)) {
     std::stringstream currentLineStream(currentLine);
     std::getline(currentLineStream, auxConvertion, ',');
@@ -78,6 +81,44 @@ void GetInorderPeopleFromFile(const std::string& fileName,
     currentPerson.mother = std::stoi(auxConvertion);
     std::cout << currentPerson << std::endl;
     personCollection.push_back(currentPerson);
+  }
+
+  peopleFile.close();
+}
+
+bool VerifyFileNameAvailability(const std::string& fileName) {
+  std::filesystem::path currentPath = std::filesystem::current_path();
+  std::string currentPathFileName;
+
+  for (const auto& entry : std::filesystem::directory_iterator(currentPath)) {
+    currentPathFileName = entry.path().filename().string();
+    if (currentPathFileName == fileName) {
+      std::cout << "\x1b[31mThis file already exists: " << fileName << "\x1b[0m"
+                << std::endl;
+      return false;
+    }
+  }
+
+  return true;
+}
+
+void ExportInorderPeopleFromVector(const std::string& fileName,
+                                   std::vector<Person>& personCollection) {
+  std::fstream peopleFile;
+  peopleFile.open(fileName, std::ios::out);
+
+  if (!peopleFile.is_open()) {
+    std::cout << std::endl
+              << "\x1b[31mError trying opening this file: \x1b[0m" << fileName
+              << std::endl;
+    peopleFile.close();
+    return;
+  }
+
+  for (const auto& element : personCollection) {
+    peopleFile << element.id << "," << element.first_name << ","
+               << element.last_name << "," << element.genre << ","
+               << element.father << "," << element.mother << "\n";
   }
 
   peopleFile.close();

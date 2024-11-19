@@ -21,8 +21,11 @@ int intInputHandler();
 char genderInputHandler();
 
 // File management
+bool VerifyFileNameAvailability(const std::string &fileName);
 bool ListCurrentPathFiles();
 void GetInorderPeopleFromFile(const std::string& fileName,
                               std::vector<Person>& personCollection);
+void ExportInorderPeopleFromVector(const std::string& fileName,
+                                   std::vector<Person>& personCollection);
 
 #endif  // IOHANDLERS_H
