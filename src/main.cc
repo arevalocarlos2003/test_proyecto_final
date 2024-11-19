@@ -17,8 +17,7 @@ int main(int argc, char const *argv[]) {
   std::vector<Node *> inorderNodes;
   std::vector<Node *> inorderNodesSubVector;
   std::vector<Person> inorderPerson;
-  Tree *root = new Tree();
-  root->insert(currentMember);
+  Tree *root = new Tree(currentMember);
 
   Node *node = nullptr;
   Tree *subTree = nullptr;

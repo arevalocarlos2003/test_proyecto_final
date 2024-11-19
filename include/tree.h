@@ -32,6 +32,11 @@ class Node {
 class Tree {
  public:
   Node *root;
+  Tree(Person value) {
+    this->root = new Node(value);
+    this->lastMember = 0;
+    this->currentLevel = 0;
+  }
   Tree() {
     this->lastMember = 0;
     this->currentLevel = 0;
