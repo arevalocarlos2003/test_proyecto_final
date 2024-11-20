@@ -6,9 +6,9 @@ void Tree::insert(const Person &value) { insertRecursive(this->root, value); }
 void Tree::insertRecursive(Node *&node, Person value) {
   if (!node) {
     node = new Node(value);
-  } else if (value.genre == 'f') {
+  } else if (value.gender == 'f') {
     insertRecursive(node->left, value);
-  } else if (value.genre == 'm') {
+  } else if (value.gender == 'm') {
     insertRecursive(node->right, value);
   }
 }
@@ -62,7 +62,6 @@ void Tree::inorderPersonRecursiveVector(Node *node,
 
 // Print2D
 void Tree::print2D() const {
-  std::cout << "\x1b[32mTree Visualization\x1b[0m" << std::endl << std::endl;
   print2DRecursive(this->root, 0);
   std::cout << std::endl << std::endl;
 }
@@ -113,18 +112,35 @@ void InsertFamilyMember(Tree *&root, int targetPosition, Person newMember) {
   Tree *subtree = new Tree();
   subtree->root = root->findSubTree(targetPosition);
 
-  root->setLastMember(root->getLastMember() + 1);
-  newMember.id = root->getLastMember();
+  if (subtree->root == nullptr) {
+    std::cout << std::endl
+              << "\x1b[31mMember with id: " << targetPosition
+              << " not found\x1b[0m" << std::endl
+              << std::endl;
+    return;
+  }
 
-  // if (subtree_root->root == nullptr) {
+  if ((newMember.gender == 'm') && (subtree->root->data.father != -1)) {
+    std::cout << std::endl
+              << "\x1b[33mThis member already has a father\x1b[0m" << std::endl
+              << std::endl;
+    return;
+  }
+
+  if ((newMember.gender == 'f') && (subtree->root->data.mother != -1)) {
+    std::cout << std::endl
+              << "\x1b[33mThis member already has a mother\x1b[0m" << std::endl
+              << std::endl;
+    return;
+  }
+
   if (subtree == nullptr) {
     std::cout << "\x1b[31mTarget family member not found\x1b[0m" << std::endl;
     return;
   }
-
+  root->setLastMember(root->getLastMember() + 1);
+  newMember.id = root->getLastMember();
   subtree->insert(newMember);
-
-  // subtree_root->insert(newMember);
 }
 
 void InsertFamilyMemberFromVector(Tree *&root, int targetPosition,
@@ -173,7 +189,7 @@ int Tree::findLevelRecursive(Node *node, const Person &value, int level) const {
 int GetTargetIDFromKeyBoard() {
   int targetID = 0;
   std::cout << "\x1b[33mtarget id: \x1b[0m";
-  std::cin >> targetID;
+  targetID = intInputHandler();
   return targetID;
 }
 
@@ -183,7 +199,7 @@ struct Node *SearchByID(std::vector<Node *> &inorderVector, int targetID) {
       [&](Node *&currentNode) { return currentNode->data.id == targetID; });
 
   if (*it == nullptr) {
-    std::cout << "\x1b[31mNot Found\x1b[0m" << std::endl;
+    std::cout << std::endl << "\x1b[31mNot Found\x1b[0m" << std::endl;
     return nullptr;
   }
 
@@ -255,8 +271,8 @@ struct Person CreateMemberFromKeyBoard(Tree *root) {
   std::cout << "last name: " << std::endl;
   std::getline(std::cin, newMember.last_name);
 
-  std::cout << "genre: " << std::endl;
-  std::cin >> newMember.genre;
+  std::cout << "gender: " << std::endl;
+  newMember.gender = genderInputHandler();
 
   newMember.father = -1;
   newMember.mother = -1;
@@ -276,19 +292,30 @@ struct Person GetMemberNamesFromKeyBoard() {
 }
 
 void PrintInorderNodes(std::vector<Node *> inorderNodesCollection) {
+  const int kMaxSpace = 15;
+  std::sort(inorderNodesCollection.begin(), inorderNodesCollection.end());
+  Person currentPerson;
+  std::cout << std::endl
+            << std::left << std::setw(kMaxSpace) << "id: " << std::left
+            << std::setw(kMaxSpace) << "first name" << std::left
+            << std::setw(kMaxSpace) << "last name" << std::endl;
   for (size_t i = 0; i < inorderNodesCollection.size(); ++i) {
-    printPerson(inorderNodesCollection[i]->data);
+    currentPerson = inorderNodesCollection[i]->data;
+    std::cout << std::left << std::setw(kMaxSpace) << currentPerson.id
+              << std::left << std::setw(kMaxSpace) << currentPerson.first_name
+              << std::left << std::setw(kMaxSpace) << currentPerson.last_name
+              << std::endl;
   }
 }
 
-void BuildTreeFromVector(std::vector<Person> &personCollection) {
+Tree *BuildTreeFromVector(std::vector<Person> &personCollection) {
   std::sort(personCollection.begin(), personCollection.end());
-  Tree *treeFromVector = new Tree();
   Person currentMember;
   Person mother;
   Person father;
   // Inserts root
-  treeFromVector->insert(personCollection[0]);
+  Tree *treeFromVector = new Tree(personCollection[0]);
+  int lastMember = 0;
 
   for (size_t i = 0; i < personCollection.size(); ++i) {
     currentMember = personCollection[i];
@@ -304,5 +331,119 @@ void BuildTreeFromVector(std::vector<Person> &personCollection) {
     }
   }
 
-  treeFromVector->print2D();
+  if (currentMember.id > lastMember) lastMember = currentMember.id;
+  if (father.id > lastMember) lastMember = father.id;
+  if (mother.id > lastMember) lastMember = mother.id;
+  treeFromVector->setLastMember(lastMember);
+
+  return treeFromVector;
+}
+
+// Delete methods
+void Tree::deleteTree() { this->deleteTreeRecursive(this->root); }
+
+void Tree::deleteTreeRecursive(Node *&root) {
+  if (root == nullptr) return;
+
+  deleteTreeRecursive(root->left);
+  deleteTreeRecursive(root->right);
+  // std::cout << "Deleting node: " << root->data << std::endl;
+  delete root;
+}
+
+// tree.cc
+void Tree::deleteSubTree(Node *subTreeRoot) {
+  if (!subTreeRoot)
+    return;  // Si el subárbol es nulo, no hay nada que eliminar.
+
+  // Llamadas recursivas para eliminar los hijos izquierdo y derecho.
+  deleteTreeRecursive(subTreeRoot->left);
+  deleteTreeRecursive(subTreeRoot->right);
+
+  // Desvincular del árbol original (si es necesario).
+  if (root == subTreeRoot) {
+    root = nullptr;  // Si se elimina la raíz, el árbol queda vacío.
+  } else {
+    Node *parent = findParent(root, subTreeRoot);
+    if (parent) {
+      if (parent->left == subTreeRoot) {
+        parent->left = nullptr;
+        parent->data.mother = -1;
+      }
+      if (parent->right == subTreeRoot) {
+        parent->right = nullptr;
+        parent->data.father = -1;
+      }
+    }
+  }
+
+  // Eliminar el nodo actual.
+  delete subTreeRoot;
+}
+
+void Tree::deleteMember(int targetID) {
+  // Buscar el subárbol con la raíz que contiene el ID especificado.
+  Node *subTreeRoot = findSubTree(targetID);
+
+  if (!subTreeRoot) {
+    std::cout << "Member with ID " << targetID << " not found." << std::endl;
+    return;
+  }
+
+  // Seleccionar el nodo para reemplazar la raíz
+  Node *replacement = nullptr;
+
+  // Reglas para seleccionar el reemplazo según el género
+  if (subTreeRoot->data.gender == 'm' && subTreeRoot->right &&
+      subTreeRoot->right->data.gender == 'm') {
+    replacement = subTreeRoot->right;  // Reemplazar con el hijo derecho.
+  } else if (subTreeRoot->data.gender == 'f' && subTreeRoot->left &&
+             subTreeRoot->left->data.gender == 'f') {
+    replacement = subTreeRoot->left;  // Reemplazar con la hija izquierda.
+  }
+
+  // Buscar el padre del nodo a eliminar
+  Node *parent = findParent(root, subTreeRoot);
+
+  // Ajustar conexiones del padre
+  if (parent) {
+    if (parent->left == subTreeRoot) {
+      parent->left = replacement;
+    } else if (parent->right == subTreeRoot) {
+      parent->right = replacement;
+    }
+  } else if (root == subTreeRoot) {
+    // Caso especial: la raíz del árbol principal está siendo eliminada.
+    root = replacement;
+  }
+
+  // Ajustar las conexiones del reemplazo
+  if (replacement) {
+    if (replacement == subTreeRoot->left) {
+      replacement->right = subTreeRoot->right;  // Conectar hijo derecho.
+    } else if (replacement == subTreeRoot->right) {
+      replacement->left = subTreeRoot->left;  // Conectar hijo izquierdo.
+    }
+  }
+
+  // Liberar memoria del nodo eliminado
+  delete subTreeRoot;
+
+  std::cout << "Member with ID " << targetID << " has been deleted."
+            << std::endl;
+}
+
+// Encuentra el padre de un nodo dado.
+Node *Tree::findParent(Node *current, Node *target) {
+  if (!current || current == target) return nullptr;
+
+  if (current->left == target || current->right == target) {
+    return current;  // Se encontró el padre.
+  }
+
+  // Buscar recursivamente en los hijos.
+  Node *leftParent = findParent(current->left, target);
+  if (leftParent) return leftParent;
+
+  return findParent(current->right, target);
 }

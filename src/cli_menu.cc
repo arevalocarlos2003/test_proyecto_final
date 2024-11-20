@@ -23,3 +23,12 @@ void ShowCLISearchOptions() {
   std::cout << "3. Search By last name" << std::endl;
   std::cout << "4. Back Main Menu" << std::endl << std::endl;
 }
+
+void ShowCLIDeletionOptions() {
+  std::cout << std::endl
+            << "\x1b[31mDelete options\x1b[0m" << std::endl
+            << std::endl;
+  std::cout << "1. Delete SubTree" << std::endl;
+  std::cout << "2. Delete and replace with parent" << std::endl;
+  std::cout << "\x1b[33m3. Back Main Menu\x1b[0m" << std::endl << std::endl;
+}

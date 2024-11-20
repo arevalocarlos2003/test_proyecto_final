@@ -8,6 +8,7 @@
 int main(int argc, char const *argv[]) {
   int option = 0;
   int target = 0;
+  std::string fileName;
 
   Person currentMember = {0, "Carlos", "Arevalo", 'm', -1, -1};
   Person targetMember;
@@ -16,8 +17,7 @@ int main(int argc, char const *argv[]) {
   std::vector<Node *> inorderNodes;
   std::vector<Node *> inorderNodesSubVector;
   std::vector<Person> inorderPerson;
-  Tree *root = new Tree();
-  root->insert(currentMember);
+  Tree *root = new Tree(currentMember);
 
   Node *node = nullptr;
   Tree *subTree = nullptr;
@@ -34,24 +34,51 @@ int main(int argc, char const *argv[]) {
     root->updateRelations();
     ShowCLIMenuOptions();
     std::cout << "\x1b[34mOption: \x1b[0m";
-    std::cin >> option;
+    option = intInputHandler();
+
     switch (option) {
       case 1:
         root->print2D();
         std::cout << std::endl
-                  << "\x1b[35mInsert Family Member\x1b[0m" << std::endl;
-        std::cout << "\x1b[33mTarget ID\x1b[0m" << std::endl;
+                  << "\x1b[32mInsert Family Member\x1b[0m" << std::endl
+                  << std::endl;
+        std::cout << std::endl
+                  << "\x1b[33mTarget ID\x1b[0m" << std::endl
+                  << std::endl;
         target = GetTargetIDFromKeyBoard();
+        std::cout << std::endl;
         newMember = CreateMemberFromKeyBoard(root);
         InsertFamilyMember(root, target, newMember);
         break;
 
       case 2:
-        inorderPerson.clear();
-        root->inorderPersonVector(inorderPerson);
-        std::sort(inorderPerson.begin(), inorderPerson.end());
-        BuildTreeFromVector(inorderPerson);
-        root->updateRelations();
+        do {
+          std::cout << std::endl
+                    << "\x1b[32mCurrent Family Tree\x1b[0m" << std::endl
+                    << std::endl;
+          root->print2D();
+          ShowCLIDeletionOptions();
+          option = intInputHandler();
+          switch (option) {
+            case 1:
+              target = GetTargetIDFromKeyBoard();
+              node = root->findSubTree(target);
+              if (node) {
+                root->deleteSubTree(node);
+                std::cout << "Subtree with root ID " << target
+                          << " has been deleted" << std::endl;
+              } else {
+                std::cout << "Subtree not found" << std::endl;
+              }
+              break;
+
+            case 2:
+              target = GetTargetIDFromKeyBoard();
+              root->deleteMember(target);
+              break;
+          }
+        } while (option != 3);
+
         break;
 
       case 3:
@@ -59,13 +86,16 @@ int main(int argc, char const *argv[]) {
           inorderNodes.clear();
           inorderNodesSubVector.clear();
           ShowCLISearchOptions();
-          std::cin >> option;
+          option = intInputHandler();
           switch (option) {
             case 1:
               root->inorderVector(inorderNodes);
               std::cout << "Search By ID" << std::endl << std::endl;
-              node = new Node(
-                  SearchByID(inorderNodes, GetTargetIDFromKeyBoard())->data);
+              node = new Node();
+              node = SearchByID(inorderNodes, GetTargetIDFromKeyBoard());
+              if (node == nullptr) {
+                break;
+              }
               printPerson(node->data);
               break;
             case 2:
@@ -131,6 +161,9 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 4:
+        std::cout << std::endl
+                  << "\x1b[32mTree Visualization\x1b[0m" << std::endl
+                  << std::endl;
         root->print2D();
         break;
 
@@ -160,9 +193,9 @@ int main(int argc, char const *argv[]) {
           break;
         }
 
-        if (SearchByID(inorderNodes, target)->data.genre == 'm') {
+        if (SearchByID(inorderNodes, target)->data.gender == 'm') {
           kinshipTitles = "father";
-        } else if (SearchByID(inorderNodes, target)->data.genre == 'f') {
+        } else if (SearchByID(inorderNodes, target)->data.gender == 'f') {
           kinshipTitles = "mother";
         }
 
@@ -181,8 +214,36 @@ int main(int argc, char const *argv[]) {
 
         break;
 
-      case 9:
+      case 6:
+        std::cout << std::endl
+                  << "\x1b[33mImport Tree\x1b[0m" << std::endl
+                  << std::endl;
+        inorderPerson.clear();
+        ListCurrentPathFiles();
+        std::cin.ignore();
+        std::cout << std::endl << "filename: ";
+        std::getline(std::cin, fileName);
 
+        GetInorderPeopleFromFile(fileName, inorderPerson);
+        std::sort(inorderPerson.begin(), inorderPerson.end());
+        root->deleteTree();
+        root = BuildTreeFromVector(inorderPerson);
+        root->updateRelations();
+        std::cout << std::endl
+                  << "\x1b[33mImported data\x1b[0m" << std::endl
+                  << std::endl;
+        root->print2D();
+        break;
+
+      case 7:
+        inorderPerson.clear();
+        root->inorderPersonVector(inorderPerson);
+        std::cin.ignore();
+        do {
+          std::cout << "Enter name for the new family tree export: ";
+          std::getline(std::cin, fileName);
+        } while (!VerifyFileNameAvailability(fileName));
+        ExportInorderPeopleFromVector(fileName, inorderPerson);
         break;
 
       default:
@@ -190,6 +251,7 @@ int main(int argc, char const *argv[]) {
     }
   } while (option != 8);
 
+  root->deleteTree();
   delete root;
   return 0;
 }
