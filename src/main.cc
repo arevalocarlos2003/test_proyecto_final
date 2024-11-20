@@ -52,13 +52,33 @@ int main(int argc, char const *argv[]) {
         break;
 
       case 2:
-        inorderPerson.clear();
-        root->inorderPersonVector(inorderPerson);
-        std::sort(inorderPerson.begin(), inorderPerson.end());
-        root->deleteTree();
-        root = BuildTreeFromVector(inorderPerson);
-        root->updateRelations();
-        root->print2D();
+        do {
+          std::cout << std::endl
+                    << "\x1b[32mCurrent Family Tree\x1b[0m" << std::endl
+                    << std::endl;
+          root->print2D();
+          ShowCLIDeletionOptions();
+          option = intInputHandler();
+          switch (option) {
+            case 1:
+              target = GetTargetIDFromKeyBoard();
+              node = root->findSubTree(target);
+              if (node) {
+                root->deleteSubTree(node);
+                std::cout << "Subtree with root ID " << target
+                          << " has been deleted" << std::endl;
+              } else {
+                std::cout << "Subtree not found" << std::endl;
+              }
+              break;
+
+            case 2:
+              target = GetTargetIDFromKeyBoard();
+              root->deleteMember(target);
+              break;
+          }
+        } while (option != 3);
+
         break;
 
       case 3:
@@ -173,9 +193,9 @@ int main(int argc, char const *argv[]) {
           break;
         }
 
-        if (SearchByID(inorderNodes, target)->data.genre == 'm') {
+        if (SearchByID(inorderNodes, target)->data.gender == 'm') {
           kinshipTitles = "father";
-        } else if (SearchByID(inorderNodes, target)->data.genre == 'f') {
+        } else if (SearchByID(inorderNodes, target)->data.gender == 'f') {
           kinshipTitles = "mother";
         }
 

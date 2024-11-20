@@ -3,4 +3,5 @@
 #include <iostream>
 void ShowCLIMenuOptions();
 void ShowCLISearchOptions();
+void ShowCLIDeletionOptions();
 #endif  // CLI_MENU_H

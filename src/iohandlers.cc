@@ -77,7 +77,7 @@ void GetInorderPeopleFromFile(const std::string& fileName,
     std::getline(currentLineStream, currentPerson.first_name, ',');
     std::getline(currentLineStream, currentPerson.last_name, ',');
     std::getline(currentLineStream, auxConvertion, ',');
-    currentPerson.genre = auxConvertion[0];
+    currentPerson.gender = auxConvertion[0];
     auxConvertion.clear();
     std::getline(currentLineStream, auxConvertion, ',');
     currentPerson.father = std::stoi(auxConvertion);
@@ -122,7 +122,7 @@ void ExportInorderPeopleFromVector(const std::string& fileName,
 
   for (const auto& element : personCollection) {
     peopleFile << element.id << "," << element.first_name << ","
-               << element.last_name << "," << element.genre << ","
+               << element.last_name << "," << element.gender << ","
                << element.father << "," << element.mother << "\n";
   }
 

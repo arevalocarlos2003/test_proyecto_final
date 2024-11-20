@@ -2,7 +2,7 @@
 
 std::ostream &operator<<(std::ostream &os, const Person &person) {
   os << "[" << person.id << "| " << person.first_name << "| "
-     << person.last_name << "| " << person.genre << "]";
+     << person.last_name << "| " << person.gender << "]";
   return os;
 }
 
@@ -24,7 +24,7 @@ void printPerson(const Person &person) {
   std::cout << std::left << std::setw(kMaxSpace) << person.id << std::left
             << std::setw(kMaxSpace) << person.first_name << std::left
             << std::setw(kMaxSpace) << person.last_name << std::left
-            << std::setw(kMaxSpace) << person.genre << std::left
+            << std::setw(kMaxSpace) << person.gender << std::left
             << std::setw(kMaxSpace) << father << std::left
             << std::setw(kMaxSpace) << mother << std::endl
             << std::endl;

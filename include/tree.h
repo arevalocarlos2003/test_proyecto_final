@@ -2,8 +2,10 @@
 #define TREE_H
 
 #include <algorithm>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
+#include <queue>
 #include <vector>
 
 #include "iohandlers.h"
@@ -45,6 +47,8 @@ class Tree {
 
   void insert(const Person &value);
   void deleteTree();
+  void deleteSubTree(Node *subTreeRoot);
+  void deleteMember(int targetID);
   void updateRelations() const;
   void inorderVector(std::vector<Node *> &nodes) const;
   void inorderPersonVector(std::vector<Person> &nodes) const;
@@ -70,6 +74,7 @@ class Tree {
                                     std::vector<Person> &nodes) const;
   void print2DRecursive(Node *root, int space) const;
   Node *findSubTreeRecursive(Node *node, const int &value) const;
+  Node *findParent(Node *current, Node *target);
   int findLevelRecursive(Node *root, const Person &value, int level) const;
 };
 
