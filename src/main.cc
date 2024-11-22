@@ -34,7 +34,7 @@ int main(int argc, char const *argv[]) {
     root->updateRelations();
     ShowCLIMenuOptions();
     std::cout << "\x1b[34mOption: \x1b[0m";
-    option = intInputHandler();
+    option = OptionInputHandler();
 
     switch (option) {
       case 1:
@@ -58,7 +58,7 @@ int main(int argc, char const *argv[]) {
                     << std::endl;
           root->print2D();
           ShowCLIDeletionOptions();
-          option = intInputHandler();
+          option = OptionInputHandler();
           switch (option) {
             case 1:
               target = GetTargetIDFromKeyBoard();
@@ -86,7 +86,7 @@ int main(int argc, char const *argv[]) {
           inorderNodes.clear();
           inorderNodesSubVector.clear();
           ShowCLISearchOptions();
-          option = intInputHandler();
+          option = OptionInputHandler();
           switch (option) {
             case 1:
               root->inorderVector(inorderNodes);

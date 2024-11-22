@@ -1,6 +1,6 @@
 #include "iohandlers.h"
 
-int intInputHandler() {
+int OptionInputHandler() {
   std::string wrongInput;
   int input = 0;
   while (true) {
@@ -17,7 +17,7 @@ int intInputHandler() {
   return input;
 }
 
-char genderInputHandler() {
+char GenderInputHandler() {
   char gender = '0';
   while (true) {
     std::cin >> gender;

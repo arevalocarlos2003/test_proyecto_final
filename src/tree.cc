@@ -189,7 +189,7 @@ int Tree::findLevelRecursive(Node *node, const Person &value, int level) const {
 int GetTargetIDFromKeyBoard() {
   int targetID = 0;
   std::cout << "\x1b[33mtarget id: \x1b[0m";
-  targetID = intInputHandler();
+  targetID = OptionInputHandler();
   return targetID;
 }
 
@@ -272,7 +272,7 @@ struct Person CreateMemberFromKeyBoard(Tree *root) {
   std::getline(std::cin, newMember.last_name);
 
   std::cout << "gender: " << std::endl;
-  newMember.gender = genderInputHandler();
+  newMember.gender = GenderInputHandler();
 
   newMember.father = -1;
   newMember.mother = -1;

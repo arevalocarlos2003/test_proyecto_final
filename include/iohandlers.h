@@ -17,8 +17,8 @@
  *
  * Copyright  (c) 2024 Carlos Arevalo
  * */
-int intInputHandler();
-char genderInputHandler();
+int OptionInputHandler();
+char GenderInputHandler();
 
 // File management
 bool VerifyFileNameAvailability(const std::string &fileName);
